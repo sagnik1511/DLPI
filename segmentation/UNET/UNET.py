@@ -1,3 +1,10 @@
+"""
+
+Sagnik Roy, 2021.
+Unet Model
+
+"""
+
 import torch
 import torch.nn as nn
 import warnings
@@ -97,9 +104,14 @@ class UNet(nn.Module):
 def test():
     rand_data = torch.rand(1, 3, 572, 572)
     model = UNet(3,3)
+    if torch.cuda.is_available():
+        model = model.cuda()
 
     assert model(rand_data).shape == (1, 3, 388, 388), "Model Error"
-    print(summary(model,(3,572,572), device = 'cpu'))
+    if torch.cuda.is_available():
+        print(summary(model,(3,572,572))
+    else:
+        print(summary(model,(3,572,572), device = 'cpu'))
 
 if __name__ == '__main__':
     test()
