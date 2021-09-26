@@ -10,19 +10,12 @@ this so, named it "Normed_VGG"
 
 """
 
-
 import torch
 import torch.nn as nn
+from vgg_config import *
 
-TEST_CONFIG = {
-    'A': {
-        'b1': [[(3, 64), 3, 1]],
-        'b2': [[(64, 128), 3, 1]],
-        'b3': [[(128, 256), 3, 1], [(256, 256), 3, 1]],
-        'b4': [[(256, 512), 3, 1], [(512, 512), 3, 1]],
-        'b5': [[(512, 512), 3, 1], [(512, 512), 3, 1]]
-    }
-}
+
+TEST_CONFIG = CONFIG
 
 class Conv(nn.Module):
 
@@ -47,7 +40,7 @@ class Normed_VGG(nn.Module):
         for num_block in range(5):
             block_lev = []
             for layer in config[f"b{num_block + 1}"]:
-                block_lev.append(Conv(layer[0][0], layer[0][1], layer[1], 1, layer[2]))
+                block_lev.append(Conv(layer[0][0], layer[0][1], layer[1], 1, layer[1] // 2))
             self.blocks.append(nn.Sequential(*block_lev))
 
         fc_in = config['b5'][-1][0][1]
